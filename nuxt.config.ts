@@ -55,7 +55,7 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/uncommitted/favicon.svg' },
-        { rel: 'apple-touch-icon', href: '/uncommitted/apple-touch-icon.svg' },
+        { rel: 'apple-touch-icon', href: '/uncommitted/apple-touch-icon.png' },
         { rel: 'manifest', href: '/uncommitted/site.webmanifest' },
         {
           rel: 'preconnect',

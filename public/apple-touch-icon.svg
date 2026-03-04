@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
-  <!-- Apple touch icon -->
-  <rect width="180" height="180" fill="#1e1b4b"/>
-  <!-- Dashed border - centered -->
-  <rect x="26" y="26" width="128" height="128" rx="28" stroke="#6366f1" stroke-width="7" stroke-dasharray="18 9" fill="none"/>
-  <!-- U letterform - centered -->
-  <path d="M58 52v52c0 20 13.5 30 32 30s32-10 32-30V52" stroke="#a5b4fc" stroke-width="12" stroke-linecap="round"/>
-</svg>

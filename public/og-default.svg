@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
-  <!-- Background -->
-  <rect width="1200" height="630" fill="#1e1b4b"/>
-  <!-- Dashed border - centered -->
-  <rect x="440" y="155" width="320" height="320" rx="64" stroke="#6366f1" stroke-width="14" stroke-dasharray="40 20" fill="none"/>
-  <!-- U letterform - centered -->
-  <path d="M510 215v130c0 50 33.75 75 80 75s80-25 80-75V215" stroke="#a5b4fc" stroke-width="28" stroke-linecap="round"/>
-</svg>
