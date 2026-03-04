@@ -38,8 +38,8 @@ jobs:
       - name: Generate static site
         run: pnpm generate
         env:
-          NUXT_APP_BASE_URL: /the-signal/
-          NUXT_PUBLIC_SITE_URL: https://thevalleydev.github.io/the-signal
+          NUXT_APP_BASE_URL: /uncommitted/
+          NUXT_PUBLIC_SITE_URL: https://thevalleydev.github.io/uncommitted
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

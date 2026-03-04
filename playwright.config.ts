@@ -4,7 +4,7 @@
  */
 import { defineConfig, devices } from '@playwright/test'
 
-const baseURL = 'http://localhost:3000/the-signal/'
+const baseURL = 'http://localhost:3000/uncommitted/'
 
 export default defineConfig({
   testDir: './tests/e2e',

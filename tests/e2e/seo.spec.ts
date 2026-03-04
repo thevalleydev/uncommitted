@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test'
 const pages = [
   { name: 'Home', path: '/', expectedType: 'WebSite' },
   { name: 'Blog', path: '/blog', expectedType: 'CollectionPage' },
-  { name: 'Blog article', path: '/blog/welcome-to-the-signal', expectedType: 'Article' },
+  { name: 'Blog article', path: '/blog/welcome-to-uncommitted', expectedType: 'Article' },
   { name: 'About', path: '/about', expectedType: 'WebPage' },
 ]
 

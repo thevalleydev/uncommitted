@@ -43,7 +43,7 @@ useHead({
   link: [
     {
       rel: 'canonical',
-      href: `https://thevalleydev.github.io/the-signal${route.path}`,
+      href: `https://thevalleydev.github.io/uncommitted${route.path}`,
     },
   ],
 })

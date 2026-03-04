@@ -51,7 +51,7 @@ usePageSeo({
 
       <p>
         Have a question or suggestion? Open an
-        <a href="https://github.com/thevalleydev/the-signal/issues/new">
+        <a href="https://github.com/thevalleydev/uncommitted/issues/new">
           issue
         </a>
         on GitHub.

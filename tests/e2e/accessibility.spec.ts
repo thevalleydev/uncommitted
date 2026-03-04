@@ -8,7 +8,7 @@ import AxeBuilder from '@axe-core/playwright'
 const pages = [
   { name: 'Home', path: '/' },
   { name: 'Blog', path: '/blog' },
-  { name: 'Blog article', path: '/blog/welcome-to-the-signal' },
+  { name: 'Blog article', path: '/blog/welcome-to-uncommitted' },
   { name: 'About', path: '/about' },
 ]
 

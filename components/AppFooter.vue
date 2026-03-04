@@ -16,7 +16,7 @@ const currentYear = new Date().getFullYear()
           About
         </NuxtLink>
         <a
-          href="https://github.com/thevalleydev/the-signal"
+          href="https://github.com/thevalleydev/uncommitted"
           class="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
           aria-label="View source on GitHub"
         >

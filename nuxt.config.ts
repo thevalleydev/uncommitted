@@ -45,13 +45,13 @@ export default defineNuxtConfig({
   },
 
   app: {
-    baseURL: process.env.NUXT_APP_BASE_URL || '/the-signal/',
+    baseURL: process.env.NUXT_APP_BASE_URL || '/uncommitted/',
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
       htmlAttrs: { lang: 'en' },
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/the-signal/favicon.svg' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/uncommitted/favicon.svg' },
         {
           rel: 'preconnect',
           href: 'https://fonts.googleapis.com',
@@ -73,8 +73,8 @@ export default defineNuxtConfig({
     identity: {
       type: 'Organization',
       name: 'Uncommitted',
-      url: 'https://thevalleydev.github.io/the-signal',
-      logo: 'https://thevalleydev.github.io/the-signal/favicon.svg',
+      url: 'https://thevalleydev.github.io/uncommitted',
+      logo: 'https://thevalleydev.github.io/uncommitted/favicon.svg',
       description: 'Works in progress. Project logs, fragments, and ideas that may or may not ship.',
     },
   },
