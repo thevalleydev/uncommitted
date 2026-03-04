@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-zinc-50 text-zinc-800 font-sans transition-colors duration-300;
+    overflow-x: hidden;
+  }
+
+  .dark body {
+    @apply bg-zinc-950 text-zinc-100;
+  }
+
+  ::selection {
+    @apply bg-signal-200 text-signal-900;
+  }
+
+  .dark ::selection {
+    @apply bg-signal-800 text-signal-100;
+  }
+}
+
+@layer components {
+  /* Centered containers with comfortable max-widths and breathing room.
+     Using plain CSS media queries because @apply doesn't expand responsive
+     variants (sm:, lg:) inside @layer components blocks. */
+  .container-narrow {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 46rem; /* ~736px — comfortable reading width */
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .container-wide {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 68rem; /* ~1088px */
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-narrow {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .container-wide {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-narrow {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .container-wide {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+
+  .link-underline {
+    @apply text-signal-700 underline decoration-signal-300 underline-offset-4
+           hover:decoration-signal-600 transition-colors;
+  }
+
+  .dark .link-underline {
+    @apply text-signal-400 decoration-signal-700 hover:decoration-signal-400;
+  }
+
+  .tag-pill {
+    @apply inline-block rounded-full bg-zinc-100 px-2.5 py-0.5 text-[0.6875rem]
+           font-medium text-zinc-600 hover:bg-signal-100 hover:text-signal-800
+           transition-colors;
+  }
+
+  .dark .tag-pill {
+    @apply bg-zinc-800 text-zinc-300 hover:bg-signal-900/40 hover:text-signal-300;
+  }
+
+  /* Glassmorphism surface: use on cards, header, floating UI */
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-zinc-200/60 shadow-sm;
+  }
+
+  .dark .glass {
+    @apply bg-zinc-900/70 border-zinc-700/40 shadow-lg shadow-black/10;
+  }
+
+  /* Subtle glass for less prominent surfaces */
+  .glass-subtle {
+    @apply bg-white/50 backdrop-blur-md border border-zinc-200/40;
+  }
+
+  .dark .glass-subtle {
+    @apply bg-zinc-900/30 border-zinc-800/40;
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .card-hover:hover {
+    @apply -translate-y-0.5 shadow-md border-zinc-300/80;
+  }
+
+  .dark .card-hover:hover {
+    @apply shadow-lg shadow-black/20 border-zinc-600/50;
+  }
+
+  /* Section divider — a subtle horizontal rule between page sections */
+  .section-divider {
+    @apply border-t border-zinc-200/60 dark:border-zinc-800/60;
+  }
+}
+
+@layer utilities {
+  /* Gradient text for hero accents */
+  .text-gradient {
+    @apply bg-gradient-to-r from-signal-500 to-signal-700 bg-clip-text text-transparent;
+  }
+
+  .dark .text-gradient {
+    @apply from-signal-400 to-signal-300;
+  }
+
+  /* Prevent prose code blocks from causing horizontal scroll */
+  .prose pre {
+    @apply overflow-x-auto;
+    max-width: 100%;
+  }
+
+  .prose img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .prose table {
+    @apply overflow-x-auto block;
+  }
+
+  /* Skip-to-content link (accessibility) */
+  .skip-link {
+    position: absolute;
+    top: -3rem;
+    left: 1rem;
+    z-index: 100;
+    border-radius: 0.25rem;
+    background-color: #d97706;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: white;
+    transition: top 0.15s ease;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+}

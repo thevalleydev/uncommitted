@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thevalleydev.github.io/the-signal/sitemap.xml

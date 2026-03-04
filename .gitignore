@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Nuxt
+.nuxt/
+.output/
+dist/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Types
+*.d.ts
+!env.d.ts
+
+# Test artifacts
+test-results/
+playwright-report/
+
+# Content cache
+.data/

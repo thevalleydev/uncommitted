@@ -1,0 +1,65 @@
+name: "\U0001F4DD Article Request"
+description: Request a new article for The Signal
+title: "[Article] "
+labels: ["article"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an article! Fill out the details below and the writing conductor will take it from here.
+
+  - type: input
+    id: topic
+    attributes:
+      label: Topic
+      description: What should this article be about? Be as specific as possible.
+      placeholder: "e.g., Why server-side rendering matters more in 2026 than it did in 2020"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and angle
+      description: |
+        Any additional context, preferred angle, or specific points you want covered.
+        The more detail you provide, the better the article will be.
+      placeholder: |
+        - Target audience: developers evaluating SSR vs SSG
+        - Focus on performance and SEO trade-offs
+        - Mention Nuxt, Next.js, and Astro as examples
+    validations:
+      required: false
+
+  - type: input
+    id: keywords
+    attributes:
+      label: Target keywords (optional)
+      description: Comma-separated keywords you want the article to target for SEO.
+      placeholder: "server-side rendering, SSR benefits, SSR vs SSG"
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References (optional)
+      description: Any links, papers, or resources you want referenced in the article.
+      placeholder: |
+        - https://web.dev/rendering-on-the-web/
+        - https://nuxt.com/docs/guide/concepts/rendering
+    validations:
+      required: false
+
+  - type: dropdown
+    id: depth
+    attributes:
+      label: Desired depth
+      description: How deep should the article go?
+      options:
+        - Overview (800-1200 words)
+        - Medium dive (1200-1800 words)
+        - Deep exploration (1800-2500 words)
+      default: 1
+    validations:
+      required: false
