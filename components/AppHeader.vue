@@ -17,11 +17,11 @@ function isActive(to: string): boolean {
     <nav class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-10 flex items-center justify-between h-14" aria-label="Primary navigation">
       <NuxtLink to="/" class="group flex items-center gap-3">
         <span
-          class="flex h-9 w-9 items-center justify-center rounded-xl bg-signal-600 text-white font-bold text-sm shadow-sm shadow-signal-600/20"
+          class="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-dashed border-indigo-500 dark:border-indigo-400 bg-indigo-950/50 text-indigo-300 font-bold text-sm"
         >
           U
         </span>
-        <span class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-signal-600 dark:group-hover:text-signal-400 transition-colors">
+        <span class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
           Uncommitted
         </span>
       </NuxtLink>

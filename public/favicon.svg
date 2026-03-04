@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="14" fill="#d97706"/>
-  <path d="M32 16v32M24 22v20M40 22v20M16 28v8M48 28v8" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <!-- Dashed border - represents uncommitted/staging -->
+  <rect x="4" y="4" width="56" height="56" rx="12" stroke="#6366f1" stroke-width="3" stroke-dasharray="8 4" fill="#1e1b4b"/>
+  <!-- U letterform -->
+  <path d="M20 18v20c0 8 5.4 12 12 12s12-4 12-12V18" stroke="#a5b4fc" stroke-width="5" stroke-linecap="round"/>
 </svg>
