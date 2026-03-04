@@ -50,8 +50,13 @@ export default defineNuxtConfig({
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
       htmlAttrs: { lang: 'en' },
+      meta: [
+        { name: 'theme-color', content: '#6366f1' },
+      ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/uncommitted/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/uncommitted/apple-touch-icon.svg' },
+        { rel: 'manifest', href: '/uncommitted/site.webmanifest' },
         {
           rel: 'preconnect',
           href: 'https://fonts.googleapis.com',
