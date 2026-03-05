@@ -1,0 +1,71 @@
+# Bug Conductor
+# Triggered when an issue is labeled "bug".
+# Mentions @copilot to trigger the coding agent to investigate and fix the bug.
+name: Bug Conductor
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  conductor:
+    if: github.event.label.name == 'bug'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Acknowledge bug
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const repoUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: [
+                '**Bug conductor activated.** Here is the plan:',
+                '',
+                '1. Investigate the reported bug and identify root cause',
+                '2. Locate affected files and trace the issue',
+                '3. Implement a minimal fix',
+                '4. Verify the fix works and doesn\'t break anything',
+                '5. Open a PR for review',
+                '',
+                `See the [Bug Investigation Protocol](${repoUrl}/.github/agents/bug-investigation.md) for the full process.`,
+                '',
+                'Starting investigation now.'
+              ].join('\n')
+            });
+
+      - name: Trigger Copilot
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const repoUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: [
+                '@copilot Please investigate and fix this bug.',
+                '',
+                '**Required reading before fixing:**',
+                `- [Bug Investigation Protocol](${repoUrl}/.github/agents/bug-investigation.md) - How to diagnose`,
+                `- [Bug Fix Checklist](${repoUrl}/.github/agents/bug-fix-checklist.md) - Quality requirements`,
+                `- [Main Instructions](${repoUrl}/.github/copilot-instructions.md) - Overall guidance`,
+                '',
+                '**Your task:**',
+                '1. Understand the bug from the description and reproduction steps',
+                '2. Search the codebase for relevant files',
+                '3. Identify the root cause',
+                '4. Implement the minimal fix that solves the problem',
+                '5. Verify the fix by building the project',
+                '6. Open a PR with `Closes #' + context.issue.number + '` in the body',
+                '',
+                'If you cannot determine the root cause, open a draft PR with your findings.'
+              ].join('\n')
+            });
