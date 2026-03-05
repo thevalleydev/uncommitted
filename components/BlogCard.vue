@@ -12,10 +12,12 @@ interface Props {
 const props = defineProps<Props>()
 
 const formattedDate = computed(() => {
-  return new Date(props.date).toLocaleDateString('en-US', {
+  const [year, month, day] = props.date.split('-').map(Number)
+  return new Date(Date.UTC(year, month - 1, day)).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'UTC',
   })
 })
 </script>

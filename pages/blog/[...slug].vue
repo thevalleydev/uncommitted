@@ -12,10 +12,12 @@ if (!article.value) {
 
 const formattedDate = computed(() => {
   if (!article.value?.date) return ''
-  return new Date(article.value.date).toLocaleDateString('en-US', {
+  const [year, month, day] = article.value.date.split('-').map(Number)
+  return new Date(Date.UTC(year, month - 1, day)).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'UTC',
   })
 })
 
