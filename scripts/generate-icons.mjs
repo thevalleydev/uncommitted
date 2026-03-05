@@ -19,12 +19,19 @@ for (const size of sizes) {
   console.log(`Created icon-${size}.png`)
 }
 
-// Generate apple touch icon (180x180)
-const appleSvg = readFileSync(join(publicDir, 'apple-touch-icon.svg'))
-await sharp(appleSvg)
+// Generate apple touch icon (180x180) from favicon
+await sharp(svgBuffer)
   .resize(180, 180)
   .png()
   .toFile(join(publicDir, 'apple-touch-icon.png'))
 console.log('Created apple-touch-icon.png')
+
+// Generate OG image (1200x630)
+const ogSvg = readFileSync(join(publicDir, 'og-default.svg'))
+await sharp(ogSvg)
+  .resize(1200, 630)
+  .png()
+  .toFile(join(publicDir, 'og-default.png'))
+console.log('Created og-default.png')
 
 console.log('Done!')
