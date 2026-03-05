@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   ],
 
   site: {
-    url: process.env.NUXT_PUBLIC_SITE_URL || 'https://thevalleydev.github.io',
+    url: process.env.NUXT_PUBLIC_SITE_URL || 'https://uncommitted.blog',
     name: 'Uncommitted',
     description: 'Works in progress. Project logs, fragments, and ideas that may or may not ship.',
     defaultLocale: 'en',
@@ -37,6 +37,18 @@ export default defineNuxtConfig({
     documentDriven: false,
   },
 
+  image: {
+    quality: 80,
+    format: ['webp', 'png', 'jpg'],
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+    },
+  },
+
   nitro: {
     prerender: {
       crawlLinks: true,
@@ -45,7 +57,7 @@ export default defineNuxtConfig({
   },
 
   app: {
-    baseURL: process.env.NUXT_APP_BASE_URL || '/uncommitted/',
+    baseURL: process.env.NUXT_APP_BASE_URL || '/',
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
@@ -54,9 +66,9 @@ export default defineNuxtConfig({
         { name: 'theme-color', content: '#6366f1' },
       ],
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/uncommitted/favicon.svg' },
-        { rel: 'apple-touch-icon', href: '/uncommitted/apple-touch-icon.png' },
-        { rel: 'manifest', href: '/uncommitted/site.webmanifest' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/site.webmanifest' },
         {
           rel: 'preconnect',
           href: 'https://fonts.googleapis.com',
@@ -78,8 +90,8 @@ export default defineNuxtConfig({
     identity: {
       type: 'Organization',
       name: 'Uncommitted',
-      url: 'https://thevalleydev.github.io/uncommitted',
-      logo: 'https://thevalleydev.github.io/uncommitted/favicon.svg',
+      url: 'https://uncommitted.blog',
+      logo: 'https://uncommitted.blog/favicon.svg',
       description: 'Works in progress. Project logs, fragments, and ideas that may or may not ship.',
     },
   },
