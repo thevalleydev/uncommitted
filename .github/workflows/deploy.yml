@@ -38,8 +38,8 @@ jobs:
       - name: Generate static site
         run: pnpm generate
         env:
-          NUXT_APP_BASE_URL: /uncommitted/
-          NUXT_PUBLIC_SITE_URL: https://thevalleydev.github.io/uncommitted
+          NUXT_APP_BASE_URL: /
+          NUXT_PUBLIC_SITE_URL: https://uncommitted.blog
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

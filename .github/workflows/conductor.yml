@@ -46,8 +46,7 @@ jobs:
         with:
           script: |
             // Mention @copilot to trigger the coding agent to start working.
-            // The agent will read .github/copilot-instructions.md and
-            // the files in .github/agents/ to produce the article.
+            const repoUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main`;
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -55,7 +54,11 @@ jobs:
               body: [
                 '@copilot Please write an article based on this issue.',
                 '',
-                'Follow the instructions in `.github/copilot-instructions.md` and the agent skill files in `.github/agents/`.',
+                '**Required reading before writing:**',
+                `- [Writing Style Guide](${repoUrl}/.github/agents/writing-style.md) - Voice, tone, banned phrases`,
+                `- [Content Quality Checklist](${repoUrl}/.github/agents/content-quality.md) - Must pass all checks`,
+                `- [SEO Specification](${repoUrl}/.github/agents/seo-spec.md) - Metadata requirements`,
+                `- [Main Instructions](${repoUrl}/.github/copilot-instructions.md) - Overall guidance`,
                 '',
                 'When done, open a PR with `Closes #' + context.issue.number + '` in the body.'
               ].join('\n')
