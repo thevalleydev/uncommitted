@@ -4,7 +4,11 @@ node_modules/
 # Nuxt
 .nuxt/
 .output/
+dist
 dist/
+
+# Package lock (not tracked in this project)
+package-lock.json
 
 # Environment
 .env

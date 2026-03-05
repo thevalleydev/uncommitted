@@ -62,6 +62,22 @@ export default defineNuxtConfig({
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
       htmlAttrs: { lang: 'en' },
+      script: [
+        {
+          // Blocking inline script: applies dark class before first paint to prevent FOUC.
+          // Checks localStorage first; falls back to system preference if unset.
+          id: 'color-mode-init',
+          innerHTML: [
+            '(function () {',
+            "  var stored = localStorage.getItem('color-mode');",
+            "  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;",
+            "  if (stored === 'dark' || (stored === null && prefersDark)) {",
+            "    document.documentElement.classList.add('dark');",
+            '  }',
+            '})();',
+          ].join('\n'),
+        },
+      ],
       meta: [
         { name: 'theme-color', content: '#6366f1' },
       ],
