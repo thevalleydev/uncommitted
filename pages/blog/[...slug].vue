@@ -1,9 +1,12 @@
 <!-- Single article page: renders Nuxt Content markdown -->
 <script setup lang="ts">
 const route = useRoute()
+// Strip trailing slash so the key matches the prerendered _payload.json
+// regardless of whether the host redirects /blog/slug → /blog/slug/
+const path = route.path.replace(/\/$/, '')
 
-const { data: article } = await useAsyncData(`blog-${route.path}`, () =>
-  queryContent(route.path).findOne(),
+const { data: article } = await useAsyncData(`blog-${path}`, () =>
+  queryContent(path).findOne(),
 )
 
 if (!article.value) {
@@ -41,14 +44,6 @@ usePageSeo({
   howTo: article.value.howTo,
 })
 
-useHead({
-  link: [
-    {
-      rel: 'canonical',
-      href: `https://thevalleydev.github.io/uncommitted${route.path}`,
-    },
-  ],
-})
 </script>
 
 <template>
