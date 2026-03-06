@@ -27,7 +27,7 @@ const formattedDate = computed(() => {
 usePageSeo({
   title: article.value.title ?? 'Article',
   description: article.value.description ?? '',
-  path: route.path,
+  path,
   ogType: 'article',
   breadcrumbs: [
     ...useBreadcrumbs('blog'),
