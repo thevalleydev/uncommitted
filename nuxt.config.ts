@@ -118,9 +118,9 @@ export default defineNuxtConfig({
       priority: 0.5,
     },
     urls: [
-      { loc: '/', priority: 1.0, changefreq: 'daily' },
-      { loc: '/blog', priority: 0.9, changefreq: 'daily' },
-      { loc: '/about', priority: 0.5, changefreq: 'monthly' },
+      { loc: '/', priority: 1.0, changefreq: 'daily', lastmod: new Date().toISOString() },
+      { loc: '/blog', priority: 0.9, changefreq: 'daily', lastmod: new Date().toISOString() },
+      { loc: '/about', priority: 0.5, changefreq: 'monthly', lastmod: new Date().toISOString() },
     ],
   },
 
