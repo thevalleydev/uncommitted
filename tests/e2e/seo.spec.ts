@@ -45,7 +45,7 @@ for (const page of pages) {
       // Title must exist and not be empty
       const title = await pw.title()
       expect(title.length).toBeGreaterThan(0)
-      expect(title).toContain('The Signal')
+      expect(title).toContain('Uncommitted')
 
       // Meta description
       const description = await pw.$eval(

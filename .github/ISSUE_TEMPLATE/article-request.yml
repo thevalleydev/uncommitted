@@ -1,5 +1,5 @@
 name: "\U0001F4DD Article Request"
-description: Request a new article for The Signal
+description: Request a new article for Uncommitted
 title: "[Article] "
 labels: ["article"]
 body:

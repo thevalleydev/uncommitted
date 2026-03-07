@@ -36,7 +36,7 @@ usePageSeo({
   article: {
     publishedTime: article.value.date,
     modifiedTime: article.value.updated || article.value.date,
-    author: 'Sage Harper',
+    author: 'thevalleydev',
     cover: article.value.cover,
     section: article.value.tags?.[0] || 'General',
     tags: article.value.tags,
@@ -89,11 +89,11 @@ usePageSeo({
         <div
           class="flex h-12 w-12 items-center justify-center rounded-full bg-signal-100 dark:bg-signal-900/40 text-signal-700 dark:text-signal-400 font-bold text-lg"
         >
-          SH
+          TV
         </div>
         <div>
-          <p class="font-semibold text-zinc-900 dark:text-zinc-50">Sage Harper</p>
-          <p class="text-sm text-zinc-600 dark:text-zinc-300">Writer at The Signal</p>
+          <p class="font-semibold text-zinc-900 dark:text-zinc-50">thevalleydev</p>
+          <p class="text-sm text-zinc-600 dark:text-zinc-300">Author at Uncommitted</p>
         </div>
       </div>
       </div>

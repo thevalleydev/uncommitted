@@ -1,6 +1,6 @@
-# The Signal
+# Uncommitted
 
-A clean, modern blog built with [Nuxt Content](https://content.nuxt.com/) and deployed to GitHub Pages. Written by **Sage Harper**.
+A clean, modern blog built with [Nuxt Content](https://content.nuxt.com/) and deployed to GitHub Pages. Written by **thevalleydev**.
 
 ## How it works
 
@@ -103,4 +103,4 @@ readingTime: "5 min read"
 
 ## License
 
-Content is copyright Sage Harper. Code is MIT licensed.
+Content is copyright thevalleydev. Code is MIT licensed.

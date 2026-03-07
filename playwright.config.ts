@@ -1,5 +1,5 @@
 /**
- * Playwright configuration for The Signal blog.
+ * Playwright configuration for the Uncommitted blog.
  * Focuses on accessibility, responsive design, and SEO validation.
  */
 import { defineConfig, devices } from '@playwright/test'
