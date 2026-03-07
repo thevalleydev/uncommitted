@@ -47,6 +47,24 @@ for (const page of pages) {
       ).toHaveLength(0)
     })
 
+    test('should inline critical CSS into the HTML document', async ({ page: pw }) => {
+      await pw.goto(page.path)
+      await pw.waitForLoadState('networkidle')
+
+      // With experimental.inlineStyles enabled, Nuxt SSG embeds each page's critical
+      // CSS in <style> tags rather than loading an external blocking stylesheet.
+      const inlineStyleCount = await pw.evaluate((): number => {
+        return document.querySelectorAll('style').length
+      })
+
+      expect(
+        inlineStyleCount,
+        `No inline <style> tags found. Critical CSS should be inlined into the HTML to remove the ` +
+          `render-blocking external stylesheet, which lowers your Lighthouse performance score below 100.\n` +
+          `Fix: set experimental.inlineStyles: true in nuxt.config.ts.`,
+      ).toBeGreaterThan(0)
+    })
+
     test('should have preload hints for font resources', async ({ page: pw }) => {
       await pw.goto(page.path)
       await pw.waitForLoadState('networkidle')

@@ -144,5 +144,12 @@ export default defineNuxtConfig({
     '/about': { prerender: true },
   },
 
+  experimental: {
+    // Inline each page's critical CSS directly into the HTML during SSG.
+    // This removes the render-blocking external stylesheet that Vite/Tailwind
+    // would otherwise emit, directly addressing FCP/LCP regressions.
+    inlineStyles: true,
+  },
+
   devtools: { enabled: true },
 })
