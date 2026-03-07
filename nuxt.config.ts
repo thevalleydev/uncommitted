@@ -95,8 +95,13 @@ export default defineNuxtConfig({
           crossorigin: '',
         },
         {
-          rel: 'stylesheet',
+          // Non-blocking font load: preload the CSS, then swap rel to stylesheet once downloaded.
+          // This eliminates the render-blocking stylesheet that reduces FCP/LCP scores.
+          // The onload value is a static, hardcoded string — no user input is interpolated here.
+          rel: 'preload',
+          as: 'style',
           href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap',
+          onload: "this.onload=null;this.rel='stylesheet'",
         },
       ],
     },
