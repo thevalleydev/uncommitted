@@ -1,33 +1,28 @@
 #!/usr/bin/env node
 /**
- * Serves the static build output with proper baseURL path structure.
- * Creates .output/serve/the-signal/ folder to match the GitHub Pages deployment.
+ * Serves the static build output for local testing.
+ * The site is built with NUXT_APP_BASE_URL=/ so assets are at /_nuxt/.
+ * Serve directly from .output/public so all paths resolve correctly.
  */
 import { spawn } from 'node:child_process'
-import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = join(__dirname, '..')
 const outputDir = join(rootDir, '.output', 'public')
-const serveDir = join(rootDir, '.output', 'serve')
-const targetDir = join(serveDir, 'the-signal')
 
-// Clean and create serve directory
-if (existsSync(serveDir)) {
-  rmSync(serveDir, { recursive: true, force: true })
+if (!existsSync(outputDir)) {
+  console.error('Build output not found at .output/public. Run `pnpm generate` first.')
+  process.exit(1)
 }
-mkdirSync(targetDir, { recursive: true })
 
-// Copy build output to the-signal subfolder
-cpSync(outputDir, targetDir, { recursive: true })
-
-console.log('✓ Created serve folder structure')
-console.log(`  Serving from: ${serveDir}`)
+console.log('✓ Serving static build output')
+console.log(`  Serving from: ${outputDir}`)
 
 // Start serve
-const server = spawn('npx', ['serve', serveDir, '-l', '3000'], {
+const server = spawn('npx', ['serve', outputDir, '-l', '3000'], {
   stdio: 'inherit',
   cwd: rootDir,
   shell: true,

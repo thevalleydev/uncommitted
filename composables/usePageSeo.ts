@@ -47,7 +47,7 @@ interface SeoOptions {
   }
 }
 
-const SITE_URL = 'https://thevalleydev.github.io/uncommitted'
+const SITE_URL = 'https://uncommitted.blog'
 const SITE_NAME = 'Uncommitted'
 
 export function usePageSeo(options: SeoOptions) {
