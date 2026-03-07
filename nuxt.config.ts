@@ -117,6 +117,7 @@ export default defineNuxtConfig({
       changefreq: 'weekly',
       priority: 0.5,
     },
+    sources: ['/__sitemap__/urls'],
     urls: [
       { loc: '/', priority: 1.0, changefreq: 'daily', lastmod: new Date().toISOString() },
       { loc: '/blog', priority: 0.9, changefreq: 'daily', lastmod: new Date().toISOString() },

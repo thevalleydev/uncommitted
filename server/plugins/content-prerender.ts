@@ -1,5 +1,5 @@
 /**
- * Dynamically adds all blog content routes to prerender at build time.
+ * Dynamically adds all blog content routes and tag routes to prerender at build time.
  * Respects the `draft` frontmatter field - draft posts are not prerendered.
  */
 import { serverQueryContent } from '#content/server'
@@ -13,14 +13,26 @@ export default defineNitroPlugin((nitroApp) => {
       // Query all blog content
       const articles = await serverQueryContent(event, 'blog').find()
       
-      for (const article of articles) {
-        // Skip drafts and items without a path
-        if (article._path && !article.draft) {
-          routes.add(article._path)
-        }
+      const published = articles.filter(a => a._path && !a.draft)
+      
+      for (const article of published) {
+        routes.add(article._path!)
       }
       
-      console.log(`[content-prerender] Added ${articles.filter(a => !a.draft).length} blog routes`)
+      // Collect unique tags from all published articles and add tag routes
+      const tags = new Set<string>()
+      for (const article of published) {
+        if (Array.isArray(article.tags)) {
+          for (const tag of article.tags) {
+            tags.add(tag)
+          }
+        }
+      }
+      for (const tag of tags) {
+        routes.add(`/blog/tag/${tag}`)
+      }
+      
+      console.log(`[content-prerender] Added ${published.length} blog routes and ${tags.size} tag routes`)
     } catch (error) {
       console.error('[content-prerender] Failed to query content:', error)
     }
