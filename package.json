@@ -13,7 +13,8 @@
     "test": "playwright test",
     "test:a11y": "playwright test accessibility",
     "test:responsive": "playwright test responsive",
-    "test:seo": "playwright test seo"
+    "test:seo": "playwright test seo",
+    "test:cwv": "playwright test web-vitals"
   },
   "dependencies": {
     "@nuxt/content": "^2.13.4",
