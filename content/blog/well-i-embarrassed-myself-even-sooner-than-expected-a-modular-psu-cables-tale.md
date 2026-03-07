@@ -40,9 +40,9 @@ I'm not saying it was wrong. I'm saying I'll never know, because I swapped the P
 
 This is the part that stings a little.
 
-When I told the AI I was swapping in a different PSU, it gave me a clear warning: do not mix modular PSU cables between brands. It explained that while the device-side connectors (the ends that plug into your drives and GPU) follow industry standards, the PSU-side connectors are completely proprietary. Each manufacturer lays out the voltage and ground pins however they want. A pin that carries 5V on a Corsair PSU might sit in the exact same physical position as a 12V pin on an EVGA unit.
+When I told the AI I was swapping in a different PSU, it gave me a clear warning: do not mix modular PSU cables between brands. Just that. A warning without the full explanation of why. I didn't think to ask for clarification, and that's really where this went sideways. If I had pushed back and said "wait, explain why SATA would matter," it almost certainly would have walked me through the whole proprietary pinout issue and I'd have known the stakes. I didn't ask. I just sort of nodded at the warning and moved on.
 
-I had a spare Corsair cable set sitting in a bin. I followed the AI's guidance for the GPU power and the motherboard connectors. I used the correct EVGA cables for those.
+Some context on the cable situation: I had just bought a new Corsair PSU for my main rig, which came with a fresh set of Corsair cables. The EVGA PSU was the one being handed down to the server. So I had new Corsair cables sitting right there, and the EVGA PSU was going into the build. I followed the AI's guidance for the GPU power and the motherboard connectors and used the correct EVGA cables for those.
 
 But for the SATA power cables, I grabbed the Corsair ones.
 
@@ -74,11 +74,13 @@ The AI was wrong about BIOS. I was wrong about SATA cables. We both made mistake
 
 ## What I Actually Took Away
 
-There are two lessons here, and I already knew both of them.
+There are three lessons here, and I already knew all three of them.
 
 The first: trust the warning labels. The AI told me not to mix cable brands. I trusted that guidance for the parts I was more worried about, and I hand-waved it for the part that seemed low-stakes. SATA connectors are boring and ubiquitous and surely they couldn't matter that much. Turns out the stakes are the same regardless of which end of the PC you're working on.
 
 The second: AI is a tool, not an oracle. It gave me a correct warning that I ignored, and it gave me confident wrong information that I also acted on. The value is in knowing which parts to verify independently. The answer to "should I update the BIOS" should never just be "the AI said no." That's a two-minute check with actual patch notes.
+
+The third, and honestly the one that stings the most: back up everything. I lost all the custom code I had built for the solar inverter polling and the web interface. I can recreate it now that I know what I'm doing, maybe better than the first version. But it still burns to destroy your own work through carelessness. I knew this rule before I knew what a computer was. I still didn't follow it.
 
 New SSD is in. The rig is alive. Nothing is set up on it yet, but the 3050 posts and the network card came up after the BIOS update.
 
