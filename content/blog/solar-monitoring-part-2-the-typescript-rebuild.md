@@ -1,6 +1,6 @@
 ---
 title: "DIY Solar Monitoring Rebuilt: TypeScript, MQTT, and Home Assistant"
-description: "After losing my custom solar monitoring stack to an SSD failure, I rebuilt it with TypeScript, MQTT, and Home Assistant — and it's better than the original."
+description: "After a PSU cable mistake took out my solar monitoring stack, I rebuilt it with TypeScript, MQTT, and Home Assistant — and it's better than the original."
 date: "2026-03-09"
 updated: "2026-03-09"
 tags:
@@ -16,23 +16,21 @@ readingTime: "9 min read"
 cover: ""
 ---
 
-This is part two of a two-part series. [Part one covers the original Python build](/blog/solar-monitoring-part-1-the-python-build) and how it ended. This is the story of what came next.
+This is part two of a two-part series. [Part one covers the original build](/blog/solar-monitoring-part-1-the-python-build) and how it ended. This is the story of what came next.
 
 ---
 
 Losing your own work stings. But there's a particular flavor of losing work that only hits when you realize the thing you rebuilt is actually better than the thing you lost.
 
-After the SSD failure took out my Python poller, Flask API, and custom dashboard, I had two choices: rebuild the same stack, or rethink it. I had been quietly annoyed by the maintenance overhead of the original setup for months. The SSD made the decision for me.
+After a [PSU cable mix-up](/blog/well-i-embarrassed-myself-even-sooner-than-expected-a-modular-psu-cables-tale) took out the drives in my server, I lost all the custom code for my solar monitoring stack. The Python poller, the TypeScript API, the hand-built dashboard — gone. I had two choices: rebuild the same stack, or rethink it.
 
 The new stack is TypeScript, Node.js, MQTT, TimescaleDB, and Home Assistant. It runs in Docker Compose, every piece of it fits in a `git push`, and adding a new sensor takes about three lines of code.
 
 ## What I Changed and Why
 
-The original stack had one meaningful weakness: everything was custom. The Python poller was custom. The API was custom. The dashboard was custom. Any change anywhere required touching code in multiple places.
+The original stack wasn't around long enough for the refactoring costs to become truly painful, but there was one thing I already knew I didn't want to carry forward: the custom dashboard. A hand-built web interface is satisfying to build and tedious to keep current. Every new metric meant touching the schema, the API, and the dashboard component. The stack worked, but the dashboard was the part I least wanted to rebuild.
 
-The most expensive part to maintain was the dashboard. Chart.js is fine, but keeping a custom web interface in sync with a changing schema is real work. Every time I wanted to add a metric, I had to update the database schema, the API response, and the dashboard component.
-
-The new approach delegates the dashboard to Home Assistant. Not because Home Assistant is perfect, but because someone else maintains it.
+So I didn't. The new approach delegates the dashboard to Home Assistant. Not because Home Assistant is perfect, but because someone else maintains it.
 
 ## The New Poller: TypeScript and modbus-serial
 
@@ -105,7 +103,7 @@ This runs once at startup, so there's no overhead per poll cycle.
 
 ## MQTT Replaces the Custom API
 
-In the original stack, the Flask API was the integration layer. Anything that wanted solar data had to know the API's endpoints and speak HTTP.
+In the original stack, the TypeScript API was the integration layer. Anything that wanted solar data had to know the API's endpoints and speak HTTP.
 
 The new integration layer is MQTT, specifically Eclipse Mosquitto running in the same Docker Compose stack. The poller publishes each metric as a retained message on a per-sensor topic:
 
@@ -274,7 +272,7 @@ The Mosquitto broker is also shared with other Docker Compose stacks on the same
 
 **Adding a metric takes three lines.** Drop a new entry in the `REGISTERS` array with the address, name, scale, and unit. TypeScript compilation catches mistakes. The sensor appears in Home Assistant on the next deploy.
 
-**The whole stack fits in a repository.** When this SSD eventually dies (they always do), I run `docker compose up -d` on a new machine and everything is back.
+**The whole stack fits in a repository.** `docker compose up -d` on a new machine and everything is back. That lesson cost me twice before I learned it.
 
 **Energy tracking works.** The trapezoidal accumulators and TimescaleDB continuous aggregates give me accurate daily kWh numbers without writing any aggregation code in the application layer.
 
@@ -290,6 +288,6 @@ And the thing that should have been obvious: push your code to a repository. Not
 
 ---
 
-The solar setup is running the new stack right now. It has been since the SSD was replaced. If you want to build something similar, the architecture is straightforward. Modbus RTU over USB, 5-second polling, MQTT for distribution, Home Assistant for visualization, TimescaleDB for history. None of it requires specialized hardware or expensive software.
+The solar setup is running the new stack right now. If you want to build something similar, the architecture is straightforward. Modbus RTU over USB, 5-second polling, MQTT for distribution, Home Assistant for visualization, TimescaleDB for history. None of it requires specialized hardware or expensive software.
 
 If you have the same inverter or a similar Modbus-speaking one, drop a comment. The register mapping is the hardest part, and the more documentation exists in public, the less time anyone spends reverse-engineering the same spec.

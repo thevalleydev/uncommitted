@@ -1,6 +1,6 @@
 ---
 title: "DIY Solar Monitoring With a Sungoldpower SPH5048: The Python Build"
-description: "How I built a custom solar inverter monitoring stack with Python, Modbus RTU, TimescaleDB, and a hand-rolled dashboard — and then lost it all."
+description: "How I built a custom solar inverter monitoring stack with Python, Modbus RTU, TimescaleDB, and a hand-rolled dashboard — and how a PSU cable killed it."
 date: "2026-03-09"
 updated: "2026-03-09"
 tags:
@@ -15,13 +15,17 @@ readingTime: "8 min read"
 cover: ""
 ---
 
-This is part one of a two-part series on building a DIY solar inverter monitoring system for a Sungoldpower SPH5048. [Part two covers the rebuild](/blog/solar-monitoring-part-2-the-typescript-rebuild) after a catastrophic SSD failure took everything down.
+This is part one of a two-part series on building a DIY solar inverter monitoring system for a Sungoldpower SPH5048. [Part two covers the rebuild](/blog/solar-monitoring-part-2-the-typescript-rebuild) after the whole stack was taken out by a PSU cable mistake.
 
 ---
 
 When I first got my solar setup running, I did what any homelab person does: I wanted numbers. Not just the numbers on the inverter's tiny LCD, but historical numbers, trending numbers, "why did the battery only charge to 80% yesterday" numbers.
 
 The Sungoldpower SPH5048 is a 5 kW, 48V hybrid/off-grid inverter with split-phase output. It does a lot of things well. Out-of-the-box monitoring is not one of them. The bundled app is unreliable on a local network, and I had no interest in sending my power data to a cloud I don't control.
+
+My first attempt at fixing this was the easy path: I paid for [Solar Assistant](https://solar-assistant.io) and ran it on a Raspberry Pi. It was a solid solution for about three months, until the Pi's SD card corrupted and took everything with it. That was the first time I lost all my solar tracking data, and I had nothing running for the next four months while I figured out what to do next.
+
+The answer I landed on was to build my own stack. That way I understood every piece, could fix every piece, and wasn't dependent on anyone else's hardware or subscription.
 
 So I built my own stack. And it worked great, right up until it didn't.
 
@@ -41,6 +45,12 @@ What I wanted to track:
 - Inverter state (charging, discharging, grid-tied, island mode)
 
 ## The Poller
+
+Before I had a working poller, I had a very much not-working one.
+
+My first instinct was to probe the serial connection to figure out what the inverter was doing. Not structured Modbus reads, just throwing bytes at the port to see what came back. What came back was a voltage anomaly. I had flooded the USB/serial interface badly enough that the inverter briefly took everything connected to it offline. No damage, but it was a genuinely scary few seconds watching my whole solar setup drop.
+
+After consulting with an AI about what I was doing wrong, I learned I had been going about it completely backwards. The inverter expects structured Modbus RTU requests. Not probing, not discovery, just: send the right frame, read the response, move on. Once I understood that, everything got simpler.
 
 The Python script that read all of this was built around `pymodbus`. A polling loop ran every 5 seconds, reading register blocks from the inverter and writing the results to TimescaleDB.
 
@@ -118,11 +128,7 @@ TimescaleDB's automatic chunk management and compression made this basically zer
 
 ## The API and Dashboard
 
-Rather than expose TimescaleDB directly to the browser, I put a lightweight Flask API in front of it. Three main endpoints:
-
-- `GET /api/current` — latest reading for every metric
-- `GET /api/history?metric=battery_soc&hours=24` — raw data for a metric over a window
-- `GET /api/summary?date=2026-03-08` — hourly and daily aggregates for a given date
+Rather than expose TimescaleDB directly to the browser, I put a lightweight TypeScript REST API in front of it. It handled current readings, historical data over a window, and daily/hourly aggregates. Nothing fancy, just a thin layer between the database and the browser.
 
 The dashboard was hand-built HTML, CSS, and vanilla JavaScript. Power flow diagram in the center, SOC gauge on the left, historical charts at the bottom using Chart.js. It looked exactly like what it was: a personal tool someone built over a few weekends.
 
@@ -142,7 +148,7 @@ Sungoldpower SPH5048
         |
   TimescaleDB (PostgreSQL)
         |
-  Flask REST API
+  TypeScript REST API
         |
   Custom HTML/JS Dashboard
 ```
@@ -151,7 +157,7 @@ It was simple at the architecture level. Everything was custom at the implementa
 
 ## What Worked
 
-For the better part of a year, this setup ran without touching it. The poller reconnected automatically if the serial connection dropped. TimescaleDB never complained. I had a full year of 5-second resolution solar data and could query any of it.
+The setup ran well. The poller reconnected automatically if the serial connection dropped. TimescaleDB never complained. I had months of 5-second resolution solar data and could query any of it.
 
 I could see exactly when the battery hit 100% and the inverter shifted to grid export. I could track the effect of season changes on daily solar yield. I could see the load jump when the HVAC turned on.
 
@@ -159,18 +165,18 @@ The thing I wanted from the beginning, continuous visibility into my own power s
 
 ## The Loss
 
-Then the SSD died.
+Then I killed it myself.
 
-Not dramatically. It just stopped mounting one morning. The server came up, the filesystem didn't. I tried every recovery tool I knew and a few I didn't. The drive was gone.
+While doing a server upgrade, I mixed a Corsair SATA power cable with an EVGA PSU. The physical connector fits. The pinouts do not match. I wrote an entire post about that incident [here](/blog/well-i-embarrassed-myself-even-sooner-than-expected-a-modular-psu-cables-tale), but the short version is: the mismatch sent wrong voltages to the drives and that was that.
 
-I had backups of my data. I did not have backups of my code.
+The server came back up. The custom code did not. I had pushed exactly nothing to a repository. The Python poller, the TypeScript API, the dashboard templates, the Chart.js configuration — all of it was gone. I could recreate the TimescaleDB schema from memory, but the application code existed only on that machine.
 
-The Python poller, the Flask API, the dashboard templates, the Chart.js configuration, all of it was gone. Months of custom work, nowhere except on a drive I couldn't read. I had pushed exactly nothing to a repository.
+Second time losing solar monitoring data. This one stung more because I built it myself.
 
-If you are reading this and you have custom code sitting only on a local machine, please go push it somewhere right now. I'll wait.
+If you have custom code sitting only on a local machine, please go push it somewhere right now. I'll wait.
 
 ---
 
-The good news, if there is good news in watching your own work disappear, is that it forced a rethink. The rebuild wasn't just a restore operation. It was a chance to look at what had been annoying about the original stack and make different choices.
+The good news is it forced a rethink. The rebuild wasn't just a restore operation. It was a chance to reconsider what the original stack was actually costing me to run and make different choices.
 
 That's what [part two is about](/blog/solar-monitoring-part-2-the-typescript-rebuild).
