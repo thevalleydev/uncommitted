@@ -104,7 +104,7 @@ def group_contiguous(registers):
     return blocks
 ```
 
-**The baud rate matters more than you'd think.** At 9600 baud, a 5-second polling interval is fine. Push it faster and you start seeing timeout errors, especially if anything else on the serial bus is competing. I left it at 5 seconds and never had issues.
+**The baud rate matters more than you'd think.** At 9600 baud, a 10-second polling interval is fine. Push it faster and you start seeing timeout errors, especially if anything else on the serial bus is competing. I left it at 5 seconds and never had issues.
 
 ## The Database: TimescaleDB
 
@@ -144,7 +144,7 @@ Sungoldpower SPH5048
    RS485 / USB
         |
   Python Poller (pymodbus)
-  [5-second poll]
+  [10-second poll]
         |
   TimescaleDB (PostgreSQL)
         |
@@ -157,7 +157,7 @@ It was simple at the architecture level. Everything was custom at the implementa
 
 ## What Worked
 
-The setup ran well. The poller reconnected automatically if the serial connection dropped. TimescaleDB never complained. I had months of 5-second resolution solar data and could query any of it.
+The setup ran well. The poller reconnected automatically if the serial connection dropped. TimescaleDB never complained. I had about 10-11 days of 10-second resolution solar data and could query any of it.
 
 I could see exactly when the battery hit 100% and the inverter shifted to grid export. I could track the effect of season changes on daily solar yield. I could see the load jump when the HVAC turned on.
 
