@@ -31,7 +31,7 @@ Home Assistant has changed a lot in the years I was not paying attention. The on
 
 ## MQTT Finally Made Sense
 
-MQTT is a protocol I have been circling for years without actually committing to. I understood the concept, a publish-subscribe message bus where sensors publish values and consumers subscribe to topics, but every time I tried to learn it I bounced off the setup complexity before I got to anything interesting.
+MQTT is a protocol I had seen the name of for years without ever finding the time to actually look into. Publish-subscribe message bus, sensors push values, consumers listen to topics. That was roughly where my knowledge stopped.
 
 Home Assistant changes that dynamic. When you install the Mosquitto broker add-on and connect the MQTT integration, the auto-discovery mechanism does most of the work. Any device or service that publishes a configuration payload to the right topic becomes a Home Assistant entity automatically. No YAML. No manual entity setup. The device announces itself, Home Assistant listens, the sensor appears.
 
@@ -153,10 +153,8 @@ The environment variable approach is simpler for a single-user setup and catches
 
 ## What This Weekend Produced
 
-A day to get Home Assistant running and data flowing. Another day to debug why the dashboards looked wrong and fix both timezone issues. Net result: a solar monitoring setup that is actually better than what I had before, maintained largely by tools I did not write, and running reliably since I got it working.
+A day to get Home Assistant running and data flowing. Another day to sort out the dashboards and fix both timezone issues. Net result: a solar monitoring setup that is actually better than what I had before, maintained largely by tools I did not write, and running reliably since I got it working.
 
-MQTT finally feels like something I understand instead of something I keep reading about. The Home Assistant integration made the learning curve concrete, there was a goal, a working outcome to aim at, and the auto-discovery mechanism meant I was seeing results quickly enough to stay interested.
-
-The timezone bugs were frustrating in the way that bugs always are when the root cause is obvious in hindsight. Both of them came down to "set the right environment variable in the right place." Neither required code changes or schema migrations. The fix was faster than the diagnosis.
+MQTT clicked faster than expected, and the timezone issues were the kind of setup learning curve you only run into once. Both came down to setting an environment variable in the right place. Neither required code changes or schema migrations.
 
 TimescaleDB is still earning its spot in the stack. I will probably write more about it separately, the continuous aggregates feature alone warrants its own writeup.
