@@ -33,11 +33,11 @@ Home Assistant has changed a lot in the years I was not paying attention. The on
 
 MQTT is a protocol I had seen the name of for years without ever finding the time to actually look into. Publish-subscribe message bus, sensors push values, consumers listen to topics. That was roughly where my knowledge stopped.
 
-Home Assistant changes that dynamic. When you install the Mosquitto broker add-on and connect the MQTT integration, the auto-discovery mechanism does most of the work. Any device or service that publishes a configuration payload to the right topic becomes a Home Assistant entity automatically. No YAML. No manual entity setup. The device announces itself, Home Assistant listens, the sensor appears.
+Home Assistant changes that dynamic. When you install the Mosquitto broker add-on and connect the MQTT integration, the [MQTT auto-discovery](https://www.home-assistant.io/integrations/mqtt/#mqtt-discovery) mechanism does most of the work. Any device or service that publishes a configuration payload to the right topic becomes a Home Assistant entity automatically. No YAML. No manual entity setup. The device announces itself, Home Assistant listens, the sensor appears.
 
 The discovery topic pattern looks like this:
 
-```
+```text
 homeassistant/sensor/<device-id>/<metric>/config
 ```
 
@@ -94,7 +94,7 @@ The UI setting and the container environment variable are separate things. Both 
 
 The second issue was in my TimescaleDB setup. I use TimescaleDB for long-term storage of solar metrics, which I may write a full post on at some point because it has been a genuinely good tool for this use case. The short version is that it is PostgreSQL with a time-series extension that adds automatic data partitioning, compression, and continuous aggregates.
 
-The problem: TimescaleDB's `time_bucket` function, when used on `TIMESTAMPTZ` columns, buckets by UTC midnight by default. If you are in a timezone that is offset from UTC, your "daily" aggregates do not align to your actual days. A bucket labeled "March 8" might contain data from 7pm local time on March 7 through 6:59pm local time on March 8, depending on your offset.
+The problem: TimescaleDB's [`time_bucket`](https://docs.timescale.com/api/latest/hyperfunctions/time_bucket/) function, when used on `TIMESTAMPTZ` columns, buckets by UTC midnight by default. If you are in a timezone that is offset from UTC, your "daily" aggregates do not align to your actual days. A bucket labeled "March 8" might contain data from 7pm local time on March 7 through 6:59pm local time on March 8, depending on your offset.
 
 For a solar system, this matters a lot. Daily production totals are one of the most useful metrics, and if the day boundaries are shifted by several hours, the numbers look wrong and, more importantly, they are wrong.
 
