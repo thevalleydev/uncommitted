@@ -60,6 +60,15 @@ jobs:
                 `- [SEO Specification](${repoUrl}/.github/agents/seo-spec.md) - Metadata requirements`,
                 `- [Main Instructions](${repoUrl}/.github/copilot-instructions.md) - Overall guidance`,
                 '',
+                '**Before opening the PR, verify every item below. Do not open the PR until all pass:**',
+                '- [ ] Title is 50-65 characters and includes the primary keyword',
+                '- [ ] Meta description is 120-155 characters and includes the primary keyword',
+                '- [ ] At least 1 internal link to another article or page on this site',
+                '- [ ] At least 1 external link to an authoritative source',
+                '- [ ] No em-dashes (—) in the article body',
+                '- [ ] No banned phrases from the writing-style guide',
+                '- [ ] All factual claims about workflows or tooling in the article are verified against the actual repo files',
+                '',
                 'When done, open a PR with `Closes #' + context.issue.number + '` in the body.'
               ].join('\n')
             });
