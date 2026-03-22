@@ -1,6 +1,6 @@
 ---
 title: "Image Handling Guide"
-description: "How to add images to your posts with automatic optimization"
+description: "A guide to adding and co-locating images in Uncommitted blog posts, with automatic optimization, Nuxt Content markdown syntax, and sizing best practices."
 date: "2026-03-04"
 tags:
   - guide

@@ -1,6 +1,6 @@
 ---
 title: "Welcome to Uncommitted"
-description: "A project journal for works in progress. Building in public, finishing optional."
+description: "Uncommitted is a project journal for works in progress. Building in public, shipping optional. Notes from the middle of the work, when nothing is certain."
 date: "2026-03-04"
 tags:
   - meta

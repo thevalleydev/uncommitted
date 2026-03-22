@@ -1,6 +1,6 @@
 ---
 title: "Bloom Filters: What Are They and Why Did I Just Learn About Them"
-description: "I stumbled on bloom filters while building a word game. Here's what they are, how they work, and why they matter for web performance."
+description: "I stumbled on bloom filters while building a word game. Here's what they are, how they work, why they're probabilistic, and why they matter for performance."
 date: "2026-03-05"
 updated: "2026-03-05"
 tags:
