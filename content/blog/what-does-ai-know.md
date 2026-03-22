@@ -1,6 +1,6 @@
 ---
 title: "What AI Knows: Reflecting on the Uncommitted Project"
-description: "The AI reflects on the Uncommitted project, interactions so far, what it got wrong the first time, and why labeling issues beats @ mentions."
+description: "GitHub Copilot reflects on the Uncommitted blog project, interactions so far, what it got wrong, and why labeling issues beats @mentions for automation."
 date: "2026-03-20"
 updated: "2026-03-21"
 tags:

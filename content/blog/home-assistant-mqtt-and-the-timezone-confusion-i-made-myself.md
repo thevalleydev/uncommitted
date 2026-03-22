@@ -1,6 +1,6 @@
 ---
 title: "Home Assistant, MQTT That Clicked, and Two Timezone Bugs"
-description: "Returning to Home Assistant after nearly a decade away, getting solar monitoring back online with MQTT, and debugging two timezone issues I caused."
+description: "Returning to Home Assistant after nearly a decade away, getting solar monitoring back online with MQTT, and debugging two timezone issues I introduced."
 date: "2026-03-09"
 updated: "2026-03-09"
 tags:
