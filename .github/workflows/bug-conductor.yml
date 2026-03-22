@@ -1,71 +1,199 @@
-# Bug Conductor
-# Triggered when an issue is labeled "bug".
-# Mentions @copilot to trigger the coding agent to investigate and fix the bug.
-name: Bug Conductor
+name: Bug Conductor (Autonomous)
 
 on:
   issues:
-    types: [labeled]
+    types: [opened]
+  issue_comment:
+    types: [created]
+  pull_request:
+    types: [closed]
 
 permissions:
   contents: write
-  issues: write
   pull-requests: write
+  issues: write
+
+env:
+  DEFAULT_BRANCH: main
+  REPO_URL: https://github.com/thevalleydev/uncommitted
 
 jobs:
-  conductor:
-    if: github.event.label.name == 'bug'
+  create-shadow-pr:
+    if: github.event_name == 'issues' && github.event.action == 'opened'
     runs-on: ubuntu-latest
-    steps:
-      - name: Acknowledge bug
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const repoUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main`;
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: [
-                '**Bug conductor activated.** Here is the plan:',
-                '',
-                '1. Investigate the reported bug and identify root cause',
-                '2. Locate affected files and trace the issue',
-                '3. Implement a minimal fix',
-                '4. Verify the fix works and doesn\'t break anything',
-                '5. Open a PR for review',
-                '',
-                `See the [Bug Investigation Protocol](${repoUrl}/.github/agents/bug-investigation.md) for the full process.`,
-                '',
-                'Starting investigation now.'
-              ].join('\n')
-            });
 
-      - name: Trigger Copilot
-        uses: actions/github-script@v7
+    steps:
+      - uses: actions/checkout@v4
         with:
-          script: |
-            const repoUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main`;
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: [
-                '@copilot Please investigate and fix this bug.',
-                '',
-                '**Required reading before fixing:**',
-                `- [Bug Investigation Protocol](${repoUrl}/.github/agents/bug-investigation.md) - How to diagnose`,
-                `- [Bug Fix Checklist](${repoUrl}/.github/agents/bug-fix-checklist.md) - Quality requirements`,
-                `- [Main Instructions](${repoUrl}/.github/copilot-instructions.md) - Overall guidance`,
-                '',
-                '**Your task:**',
-                '1. Understand the bug from the description and reproduction steps',
-                '2. Search the codebase for relevant files',
-                '3. Identify the root cause',
-                '4. Implement the minimal fix that solves the problem',
-                '5. Verify the fix by building the project',
-                '6. Open a PR with `Closes #' + context.issue.number + '` in the body',
-                '',
-                'If you cannot determine the root cause, open a draft PR with your findings.'
-              ].join('\n')
-            });
+          ref: ${{ env.DEFAULT_BRANCH }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create shadow branch
+        id: branch
+        run: |
+          ISSUE=${{ github.event.issue.number }}
+          BRANCH="agent/issue-${ISSUE}-analysis"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+          git checkout -b "$BRANCH"
+          mkdir -p .github/shadow-issues
+          echo "Shadow workspace for Issue #${ISSUE}" > .github/shadow-issues/issue-${ISSUE}.md
+          git add .
+          git commit -m "chore: create shadow workspace for issue #${ISSUE}"
+          git push origin "$BRANCH"
+
+      - name: Create shadow PR
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE=${{ github.event.issue.number }}
+          BRANCH=${{ steps.branch.outputs.branch }}
+
+          BODY=$(cat <<EOF
+Shadow PR for Copilot analysis of Issue #${ISSUE}
+
+**Source Issue:** #${ISSUE}
+
+---
+
+### Issue context
+
+**Title:** ${{ github.event.issue.title }}
+
+**Body:**
+${{ github.event.issue.body }}
+
+---
+
+### Required reading before fixing:
+- [Bug Investigation Protocol](${REPO_URL}/.github/agents/bug-investigation.md)
+- [Bug Fix Checklist](${REPO_URL}/.github/agents/bug-fix-checklist.md)
+- [Main Instructions](${REPO_URL}/.github/copilot-instructions.md)
+
+### Your task:
+1. Understand the bug from the description and reproduction steps
+2. Search the codebase for relevant files
+3. Identify the root cause
+4. Implement the minimal fix that solves the problem
+5. Verify the fix by building the project
+6. Open a PR with \`Closes #${ISSUE}\` in the body
+
+If you cannot determine the root cause, open a draft PR with your findings.
+EOF
+)
+
+          PR_NUMBER=$(gh pr create \
+            --draft \
+            --title "agent/issue-${ISSUE}-analysis" \
+            --body "$BODY" \
+            --base "${DEFAULT_BRANCH}" \
+            --head "$BRANCH" \
+            --label "copilot-shadow" \
+            --json number --jq '.number')
+
+          echo "pr=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+      - name: Summon Copilot
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE=${{ github.event.issue.number }}
+          PR=${{ steps.pr.outputs.pr }}
+
+          COMMENT=$(cat <<EOF
+@copilot Please investigate and fix this bug.
+
+**Required reading before fixing:**
+- [Bug Investigation Protocol](${REPO_URL}/.github/agents/bug-investigation.md)
+- [Bug Fix Checklist](${REPO_URL}/.github/agents/bug-fix-checklist.md)
+- [Main Instructions](${REPO_URL}/.github/copilot-instructions.md)
+
+**Your task:**
+1. Understand the bug from the description and reproduction steps
+2. Search the codebase for relevant files
+3. Identify the root cause
+4. Implement the minimal fix that solves the problem
+5. Verify the fix by building the project
+6. Open a PR with \`Closes #${ISSUE}\` in the body
+
+If you cannot determine the root cause, open a draft PR with your findings.
+EOF
+)
+
+          gh pr comment "$PR" --body "$COMMENT"
+
+      - name: Notify Issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE=${{ github.event.issue.number }}
+          PR=${{ steps.pr.outputs.pr }}
+          gh issue comment "$ISSUE" --body "Bug Conductor activated. Copilot is analyzing this issue in a shadow workspace (PR #${PR})."
+
+  mirror-agent-comments:
+    if: github.event_name == 'issue_comment' && github.event.issue.pull_request != null
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if PR is a shadow PR
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR=${{ github.event.issue.number }}
+          LABELS=$(gh pr view "$PR" --json labels --jq '.labels[].name')
+          if echo "$LABELS" | grep -q "copilot-shadow"; then
+            echo "shadow=true" >> $GITHUB_OUTPUT
+          else
+            echo "shadow=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Exit if not shadow PR
+        if: steps.check.outputs.shadow != 'true'
+        run: echo "Not a shadow PR."
+
+      - name: Extract Issue number
+        id: issue
+        if: steps.check.outputs.shadow == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR=${{ github.event.issue.number }}
+          ISSUE=$(gh pr view "$PR" --json body --jq '.body' | sed -n 's/.*Source Issue: #\([0-9]\+\).*/\1/p')
+          echo "issue=$ISSUE" >> $GITHUB_OUTPUT
+
+      - name: Mirror comment to Issue
+        if: steps.check.outputs.shadow == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE=${{ steps.issue.outputs.issue }}
+          AUTHOR="${{ github.event.comment.user.login }}"
+          BODY="${{ github.event.comment.body }}"
+
+          if [ "$AUTHOR" = "github-actions[bot]" ]; then exit 0; fi
+
+          gh issue comment "$ISSUE" --body "_Comment from shadow PR by **@$AUTHOR**:_\n\n$BODY"
+
+  close-issue-on-merge:
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Close referenced Issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BODY="${{ github.event.pull_request.body }}"
+          PR=${{ github.event.pull_request.number }}
+
+          ISSUES=$(printf "%s\n" "$BODY" | sed -n 's/.*[Cc]loses #\([0-9]\+\).*/\1/p')
+
+          for I in $ISSUES; do
+            gh issue close "$I" --comment "Closed automatically because PR #${PR} was merged."
+          done
